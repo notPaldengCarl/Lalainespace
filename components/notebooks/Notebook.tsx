@@ -8,7 +8,8 @@ export const Notebook: React.FC = () => {
   const { 
     folders, pages, activePage, activePageId, expandedFolders,
     addFolder, deleteFolder, renameFolder, toggleFolder,
-    addPage, deletePage, updatePage, movePage, setActivePageId
+    addPage, deletePage, updatePage, movePage, setActivePageId,
+    updateFolder, pinPage
   } = useNotebook();
 
   // Helper to find folder name for active page
@@ -36,6 +37,9 @@ export const Notebook: React.FC = () => {
         onSelectPage={setActivePageId}
         onRenamePage={handleRenamePage}
         onMovePage={movePage}
+        onUpdateFolder={updateFolder}
+        onPinPage={pinPage}
+        onUpdatePage={updatePage}
       />
       <NotebookEditor 
         page={activePage}

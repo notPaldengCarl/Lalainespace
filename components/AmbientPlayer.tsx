@@ -45,9 +45,9 @@ export const AmbientPlayer: React.FC = () => {
     <Card 
         title="Ambient Mode" 
         icon={isPlaying ? <Volume2 size={24} className="text-accent animate-pulse" /> : <VolumeX size={24} />}
-        className="h-full bg-panel"
+        className="h-full bg-panel overflow-hidden"
     >
-      <div className="flex items-center justify-between h-full pt-1">
+      <div className="flex flex-col h-full pt-1">
         {/* Hidden Audio Element */}
         <audio 
             ref={audioRef} 
@@ -56,7 +56,7 @@ export const AmbientPlayer: React.FC = () => {
             className="hidden"
         />
 
-        <div className="grid grid-cols-4 gap-2 w-full">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 w-full h-full">
             {SOUNDS.map(sound => {
                 const isActive = activeSound === sound.id;
                 return (
@@ -64,20 +64,19 @@ export const AmbientPlayer: React.FC = () => {
                         key={sound.id}
                         onClick={() => toggleSound(sound.id)}
                         className={`
-                            flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl transition-all duration-300
+                            flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl transition-all duration-300 h-full min-h-[60px] relative overflow-hidden group
                             ${isActive 
-                                ? 'bg-accent text-white shadow-md scale-105' 
+                                ? 'bg-accent text-white shadow-md' 
                                 : 'bg-white/40 text-mocha hover:bg-white hover:text-coffee'}
                         `}
                     >
-                        {isActive && isPlaying ? (
-                            <div className="relative">
-                                {sound.icon}
-                                <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-ping" />
-                            </div>
-                        ) : (
-                            sound.icon
+                        {isActive && isPlaying && (
+                            <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-green-300 rounded-full animate-ping" />
                         )}
+                        
+                        <div className={`transition-transform duration-300 ${isActive && isPlaying ? 'scale-110' : 'group-hover:scale-110'}`}>
+                            {sound.icon}
+                        </div>
                         <span className="text-[10px] font-medium tracking-wide">{sound.label}</span>
                     </button>
                 )

@@ -82,6 +82,8 @@ export interface NotePage {
   content: string;
   updatedAt: number;
   folderId?: string; // Optional: if undefined, it's in root
+  isPinned?: boolean;
+  isLocked?: boolean;
 }
 
 export interface Habit {

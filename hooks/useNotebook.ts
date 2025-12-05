@@ -53,12 +53,12 @@ export const useNotebook = () => {
   const addFolder = useCallback((name: string, color: string = 'text-accent') => {
     const trimmedName = name.trim();
     if (!trimmedName) {
-      alert("Folder name cannot be empty.");
+      // Alert handled by UI component via SWAL now
       return;
     }
     
     if (folders.some(f => f.name.toLowerCase() === trimmedName.toLowerCase())) {
-      alert("A folder with this name already exists.");
+      // Duplicate check could trigger SWAL in UI, but simple return here allows silent fail or we can add a callback
       return;
     }
 
@@ -146,6 +146,11 @@ export const useNotebook = () => {
     setPages(prev => prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: Date.now() } : p));
   }, []);
 
+  // Pinning feature
+  const pinPage = useCallback((id: string, isPinned: boolean) => {
+     setPages(prev => prev.map(p => p.id === id ? { ...p, isPinned: isPinned } : p));
+  }, []);
+
   const activePage = pages.find(p => p.id === activePageId);
 
   return {
@@ -163,6 +168,7 @@ export const useNotebook = () => {
     addPage,
     deletePage,
     updatePage,
-    movePage
+    movePage,
+    pinPage
   };
 };

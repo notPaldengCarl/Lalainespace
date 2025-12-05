@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, X, Star, Clock, Trash2, Maximize2, Minimize2, Cake } from 'lucide-react';
 import { Card } from './Card';
 import { Button } from './Button';
@@ -48,8 +48,8 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ events, onAddEve
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Date Picker Mode
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // Date Picker Ref
+  const dateInputRef = useRef<HTMLInputElement>(null);
   
   // Modal State
   const [newEventTitle, setNewEventTitle] = useState('');
@@ -146,7 +146,10 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ events, onAddEve
   const handleMonthInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [y, m] = e.target.value.split('-');
     setCurrentDate(new Date(parseInt(y), parseInt(m) - 1, 1));
-    setShowDatePicker(false);
+  };
+
+  const triggerDatePicker = () => {
+    dateInputRef.current?.showPicker();
   };
 
   return (
@@ -157,31 +160,29 @@ export const CalendarWidget: React.FC<CalendarWidgetProps> = ({ events, onAddEve
         title="Calendar"
         action={
           <div className="flex items-center gap-2">
-             <div className="flex items-center gap-1 bg-white/50 rounded-lg p-1 relative">
+             <div className="flex items-center gap-1 bg-white/50 rounded-lg p-1 relative shadow-sm border border-white/50">
                 <button onClick={prevMonth} className="p-1 hover:bg-white rounded-md text-mocha transition-colors">
                   <ChevronLeft size={16} />
                 </button>
                 
-                {/* Clickable Month/Year or Input */}
-                <div className="relative">
-                  {!showDatePicker ? (
-                    <button 
-                      onClick={() => setShowDatePicker(true)}
-                      className="text-xs md:text-sm font-medium text-coffee px-2 min-w-[70px] text-center hover:bg-white rounded transition-colors"
-                      title="Click to jump to date"
-                    >
-                      {format(currentDate, 'MMM yyyy')}
-                    </button>
-                  ) : (
-                    <input 
-                      type="month" 
-                      value={format(currentDate, 'yyyy-MM')}
-                      onChange={handleMonthInput}
-                      onBlur={() => setShowDatePicker(false)}
-                      autoFocus
-                      className="w-28 text-xs p-1 rounded border border-accent bg-white outline-none"
-                    />
-                  )}
+                {/* Improved Date Header Trigger */}
+                <div className="relative group">
+                  <button 
+                    onClick={triggerDatePicker}
+                    className="text-xs md:text-sm font-bold text-coffee px-2 min-w-[90px] text-center hover:bg-white rounded transition-colors flex items-center justify-center gap-1"
+                    title="Click to jump to date"
+                  >
+                    {format(currentDate, 'MMM yyyy')}
+                  </button>
+                  {/* Invisible Input overlayed or ref driven */}
+                  <input 
+                    ref={dateInputRef}
+                    type="month" 
+                    value={format(currentDate, 'yyyy-MM')}
+                    onChange={handleMonthInput}
+                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer pointer-events-none"
+                    style={{visibility: 'hidden'}}
+                  />
                 </div>
 
                 <button onClick={nextMonth} className="p-1 hover:bg-white rounded-md text-mocha transition-colors">

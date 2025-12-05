@@ -4,22 +4,6 @@
 
 Lalaine is a personal dashboard designed to help you organize your life without the stress. It combines essential productivity tools with a cozy, "lo-fi" aesthetic, making it perfect for students, creatives, and anyone who wants a calmer digital workspace.
 
-## 🧰 Tech Stack & Technologies Used
-
-### **Frontend**
-- **React** (UI Framework)
-- **TypeScript** (Typed JavaScript)
-- **Vite** (Bundler)
-- **TailwindCSS** (Design)
-- **Framer Motion** (Animations)
-- **SweetModal / SweetAlert** (Modals & alerts)
-- **React Router** (Navigation)
-- **React Icons** (Icon assets)
-
-
-### **Storage**
-- **localStorage** — Saves all user data (offline)
-
 ## ✨ Core Features
 
 ### 1. 🍅 Focus Timer (Pomodoro)

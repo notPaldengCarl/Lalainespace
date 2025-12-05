@@ -42,36 +42,29 @@ export const SpotifyWidget: React.FC = () => {
 
   return (
     <Card 
-      title="Spotify Player" 
-      icon={<Music size={24} />} 
-      className="h-full min-h-[220px]"
-      action={
-        <button 
-          onClick={() => setIsEditing(!isEditing)} 
-          className="text-mocha hover:text-accent p-1 transition-colors bg-white/50 rounded-lg"
-          title="Change Playlist"
-        >
-          <Settings size={16} />
-        </button>
-      }
+      className="h-full p-0 overflow-hidden relative group border-none bg-black"
     >
-      <div className="flex flex-col h-full gap-2">
-        {isEditing && (
-          <div className="flex flex-col gap-2 mb-2 animate-in fade-in slide-in-from-top-2 bg-white/40 p-2 rounded-xl">
+        {isEditing ? (
+          <div className="absolute inset-0 bg-panel z-20 p-4 flex flex-col gap-2 overflow-y-auto animate-in fade-in slide-in-from-bottom-4">
+            <div className="flex justify-between items-center mb-2">
+                <h3 className="font-bold text-coffee text-sm">Select Playlist</h3>
+                <button onClick={() => setIsEditing(false)} className="text-mocha hover:text-coffee"><Settings size={16} /></button>
+            </div>
+            
             {/* Presets */}
             <div className="grid grid-cols-2 gap-2">
               {PRESETS.map(preset => (
                 <button
                   key={preset.id}
                   onClick={() => { setPlaylistId(preset.id); setIsEditing(false); }}
-                  className="text-xs text-left px-2 py-1.5 rounded-lg bg-white/60 hover:bg-accent hover:text-white transition-colors truncate"
+                  className="text-xs text-left px-2 py-2 rounded-lg bg-white/60 hover:bg-accent hover:text-white transition-colors truncate"
                 >
                   {preset.name}
                 </button>
               ))}
             </div>
             
-            <div className="h-px bg-mocha/10" />
+            <div className="h-px bg-mocha/10 my-1" />
 
             {/* Custom Input */}
             <div className="flex gap-2">
@@ -79,7 +72,7 @@ export const SpotifyWidget: React.FC = () => {
                 type="text" 
                 value={inputUrl}
                 onChange={(e) => setInputUrl(e.target.value)}
-                placeholder="Or paste ID/Link..."
+                placeholder="Or paste ID..."
                 className="flex-1 px-2 py-1.5 rounded-lg text-xs bg-white border border-transparent focus:border-accent outline-none"
               />
               <Button size="sm" onClick={handleUpdate} className="!py-1 !px-2">
@@ -87,11 +80,19 @@ export const SpotifyWidget: React.FC = () => {
               </Button>
             </div>
           </div>
+        ) : (
+            <button 
+                onClick={() => setIsEditing(true)} 
+                className="absolute top-2 right-2 z-10 text-white/50 hover:text-white p-1.5 bg-black/20 hover:bg-black/50 backdrop-blur-sm rounded-full transition-colors opacity-0 group-hover:opacity-100"
+                title="Change Playlist"
+            >
+                <Settings size={14} />
+            </button>
         )}
         
-        <div className="flex-1 rounded-xl overflow-hidden shadow-sm bg-[#212121]">
+        <div className="w-full h-full bg-[#212121]">
           <iframe
-            style={{ borderRadius: '12px', display: 'block', border: 'none' }}
+            style={{ display: 'block', border: 'none' }}
             src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
             width="100%"
             height="100%"
@@ -101,7 +102,6 @@ export const SpotifyWidget: React.FC = () => {
             title="Spotify Embed"
           />
         </div>
-      </div>
     </Card>
   );
 };

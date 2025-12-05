@@ -229,20 +229,67 @@ const App: React.FC = () => {
   };
 
   const handleSetPin = () => {
-    const newPin = prompt("Enter a new 4-digit PIN:");
-    if (newPin && newPin.length === 4 && !isNaN(Number(newPin))) {
-      setPin(newPin);
-      localStorage.setItem('lalaine_pin', newPin);
-      alert("Security PIN set! You will need this to enter the app next time.");
-    } else if (newPin) {
-      alert("Invalid PIN. Please enter exactly 4 digits.");
+    const Swal = (window as any).Swal;
+    if (Swal) {
+      Swal.fire({
+        title: 'Set Security PIN',
+        text: 'Enter a 4-digit PIN to lock your app.',
+        input: 'text',
+        inputAttributes: {
+          maxlength: '4',
+          autocapitalize: 'off',
+          autocorrect: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Set PIN',
+        preConfirm: (value: string) => {
+          if (!value || value.length !== 4 || isNaN(Number(value))) {
+            Swal.showValidationMessage('Please enter exactly 4 digits');
+          }
+          return value;
+        }
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          setPin(result.value);
+          localStorage.setItem('lalaine_pin', result.value);
+          Swal.fire('Locked & Loaded', 'Your PIN has been set.', 'success');
+        }
+      });
+    } else {
+      // Fallback
+      const newPin = prompt("Enter a new 4-digit PIN:");
+      if (newPin && newPin.length === 4 && !isNaN(Number(newPin))) {
+        setPin(newPin);
+        localStorage.setItem('lalaine_pin', newPin);
+        alert("Security PIN set! You will need this to enter the app next time.");
+      } else if (newPin) {
+        alert("Invalid PIN. Please enter exactly 4 digits.");
+      }
     }
   };
 
   const handleRemovePin = () => {
-    if (confirm("Remove security PIN? Anyone on this device can access your data.")) {
-      setPin('');
-      localStorage.removeItem('lalaine_pin');
+    const Swal = (window as any).Swal;
+    if (Swal) {
+      Swal.fire({
+        title: 'Remove PIN?',
+        text: 'Anyone on this device will be able to access your data.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, remove it',
+        confirmButtonColor: '#ef4444'
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          setPin('');
+          localStorage.removeItem('lalaine_pin');
+          Swal.fire('Unlocked', 'Security PIN removed.', 'success');
+        }
+      });
+    } else {
+      if (confirm("Remove security PIN? Anyone on this device can access your data.")) {
+        setPin('');
+        localStorage.removeItem('lalaine_pin');
+      }
     }
   };
 
@@ -760,15 +807,15 @@ const App: React.FC = () => {
                     </div>
                   )}
 
-                  <div className="col-span-1 md:col-span-1 lg:col-span-4 space-y-6">
+                  <div className="col-span-1 md:col-span-2 lg:col-span-4 flex flex-col md:flex-row lg:flex-col gap-6">
                     {visibleWidgets.ambient && (
-                      <div className="h-[140px] flex-shrink-0">
+                      <div className="h-full min-h-[140px] flex-1">
                         <AmbientPlayer />
                       </div>
                     )}
 
                     {visibleWidgets.spotify && (
-                      <div className="h-[220px] flex-shrink-0">
+                      <div className="h-full min-h-[160px] flex-1">
                         <SpotifyWidget />
                       </div>
                     )}
