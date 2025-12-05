@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lalaine</title>
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#FBF7F3" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      :root {
+        --color-cream: #FBF7F3;
+        --color-panel: #F6EDE9;
+        --color-accent: #B78A67;
+        --color-accent-light: #D9B99A;
+        --color-coffee: #4A382E;
+        --color-mocha: #8B6F60;
+      }
+
+      /* Mocha Theme (Dark) */
+      [data-theme='mocha'] {
+        --color-cream: #2C2420;
+        --color-panel: #3D322C;
+        --color-accent: #D9B99A;
+        --color-accent-light: #8B6F60;
+        --color-coffee: #F6EDE9; /* Text becomes light */
+        --color-mocha: #B78A67;
+      }
+
+      /* Sage Theme (Green) */
+      [data-theme='sage'] {
+        --color-cream: #F1F4F0;
+        --color-panel: #E2E8E1;
+        --color-accent: #7A9E7E;
+        --color-accent-light: #B4CBB7;
+        --color-coffee: #2D3A2F;
+        --color-mocha: #5F7A63;
+      }
+
+      /* Rose Theme (Pink) */
+      [data-theme='rose'] {
+        --color-cream: #FFF5F7;
+        --color-panel: #FFE4E8;
+        --color-accent: #D48C9D;
+        --color-accent-light: #F2Cbd5;
+        --color-coffee: #4A2E36;
+        --color-mocha: #9E6B77;
+      }
+
+      /* Ocean Theme (Blue) */
+      [data-theme='ocean'] {
+        --color-cream: #F0F4F8;
+        --color-panel: #E1E8F0;
+        --color-accent: #6B9AC4;
+        --color-accent-light: #A3C4D9;
+        --color-coffee: #243442;
+        --color-mocha: #5A758C;
+      }
+
+      /* Lavender Theme (Purple) */
+      [data-theme='lavender'] {
+        --color-cream: #F7F5FA;
+        --color-panel: #EBE5F2;
+        --color-accent: #9D88B3;
+        --color-accent-light: #C5B6D4;
+        --color-coffee: #382E42;
+        --color-mocha: #705F82;
+      }
+
+      body {
+        background-color: var(--color-cream);
+        color: var(--color-coffee);
+      }
+
+      /* Fix inputs in Mocha theme to be readable */
+      [data-theme='mocha'] input:not([type='radio']),
+      [data-theme='mocha'] select,
+      [data-theme='mocha'] textarea,
+      [data-theme='mocha'] .bg-white {
+        background-color: rgba(61, 50, 44, 0.8);
+        color: #F6EDE9;
+        border-color: rgba(217, 185, 154, 0.2);
+      }
+      
+      /* Specific override for white cards/modals in Mocha to keep them legible */
+      [data-theme='mocha'] .bg-white {
+         background-color: #3D322C;
+         color: #F6EDE9;
+      }
+      
+      /* Revert text color for specific white elements that stay white */
+      [data-theme='mocha'] .swal2-input,
+      [data-theme='mocha'] .swal2-html-container {
+        color: #F6EDE9 !important;
+      }
+
+      [data-theme='mocha'] input::placeholder,
+      [data-theme='mocha'] textarea::placeholder {
+        color: rgba(246, 237, 233, 0.5) !important;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-accent-light); 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-accent); 
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      
+      /* SweetAlert Customization matches theme */
+      div:where(.swal2-container) div:where(.swal2-popup) {
+        background: var(--color-panel) !important;
+        color: var(--color-coffee) !important;
+        border-radius: 1.5rem !important;
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+      div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+        background-color: var(--color-accent) !important;
+      }
+      
+      /* Calendar specific fixes for dark mode */
+      [data-theme='mocha'] input[type="month"] {
+        color-scheme: dark;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: 'var(--color-cream)',
+              panel: 'var(--color-panel)',
+              accent: 'var(--color-accent)',
+              accentLight: 'var(--color-accent-light)',
+              coffee: 'var(--color-coffee)',
+              mocha: 'var(--color-mocha)',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "date-fns": "https://aistudiocdn.com/date-fns@^4.1.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
+    "path": "https://aistudiocdn.com/path@^0.12.7",
+    "vite": "https://aistudiocdn.com/vite@^7.2.6",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "url": "https://aistudiocdn.com/url@^0.11.4"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-cream text-coffee antialiased selection:bg-accentLight selection:text-coffee transition-colors duration-500">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
